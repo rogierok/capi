@@ -2,13 +2,15 @@
 
 Very simple cache handler.
 
+`npm install @rogierok/capi`
+
 ## Features
 - Simple to use API for caching
 - Supports localStorage and IndexedDB automatically
 - TTL for cache entries
 - Multiple namespaces
 
-## API
+## Functions
 - `set(key: string, value: any, options?: { ttl?: number }, namespace?: string): Promise<void>` Set value with optional TTL (ms) and namespace
 - `get(key: string, namespace?: string): Promise<any | null>` Get value, optionally from namespace
 - `delete(key: string, namespace?: string): Promise<void>` Delete value, optionally from namespace
