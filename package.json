@@ -1,0 +1,17 @@
+{
+  "name": "capi",
+  "version": "1.0.0",
+  "description": "Very simple cache handler",
+  "main": "capi.js",
+  "type": "module",
+  "exports": {
+    ".": "./capi.js"
+  },
+  "keywords": ["cache", "localStorage", "IndexedDB", "ttl", "storage"],
+  "author": "Rogier Goossen",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  }
+}
