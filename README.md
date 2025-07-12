@@ -1,6 +1,6 @@
 # capi
 
-Very simple browser cache handler.
+Very simple browser storage/cache handler, no need to know how to handle browser storage, that's what this API should do for you! keeping it simple and easy to understand.
 
 *This library is browser-only. It relies on `localStorage` and `IndexedDB`, which are not available in Node.js environments.*
 
