@@ -1,6 +1,6 @@
 {
-  "name": "capi",
-  "version": "1.0.0",
+  "name": "@rogierok/capi",
+  "version": "1.1.0",
   "description": "Very simple cache handler",
   "main": "capi.js",
   "type": "module",
@@ -12,6 +12,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/rogierok/capi"
   }
 }
