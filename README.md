@@ -1,6 +1,6 @@
 # capi
 
-Very simple cache handler.
+Very simple browser cache handler.
 
 *This library is browser-only. It relies on `localStorage` and `IndexedDB`, which are not available in Node.js environments.*
 
