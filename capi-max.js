@@ -170,7 +170,7 @@ const capi = {
         const enc = typeof TextEncoder !== 'undefined' ? new TextEncoder() : null;
         const bytes = enc ? enc.encode(x) : Array.from(unescape(encodeURIComponent(x))).map(c => c.charCodeAt(0));
         const z = bytes.length;
-        const T = 20 * 1024 * 1024;
+        const T = 2.5 * 1024 * 1024;
         let chunkOpt = o && typeof o.chunk !== 'undefined' ? o.chunk : true;
         let chunkSize = 512 * 1024;
         if (chunkOpt === false) chunkSize = 0;

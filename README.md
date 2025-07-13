@@ -108,7 +108,7 @@ console.log(hasElephant); // true or false
 ## Storage behavior
 
 - Values that serialize to JSON and are small enough are stored in `localStorage` for fast access.
-- Large values (by default over 1 MB or with TTL > 1 hour) are stored in IndexedDB.
+- Large values (by default over 2.5 MB) are stored in IndexedDB.
 - Very large JSON values are **split into chunks** (default 512 KB) and stored as separate records in IndexedDB to work around browser limits.
 - Expired entries are cleaned up automatically every minute.
 - Namespaces prefix keys with `{namespace}::` to avoid collisions.
