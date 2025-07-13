@@ -37,8 +37,15 @@ Stores a value under `key` with optional TTL and chunking.
 - **namespace** (`string`) — Optional namespace to isolate keys  
 
 ```javascript
-// Example: Store a lion object in the 'mammals' namespace with a TTL of 1 hour
-await capi.set('lion', {name: 'Lion', habitat: 'Savannah'}, {ttl: 3600}, 'mammals');
+// Example: Store a lion object in the 'mammals' namespace
+await capi.set('lion', {name: 'Simba', habitat: 'Savannah'}, 'mammals');
+
+// Example: Store a large zebra family with 256kb chunks
+const zebraFamily = Array(100000).fill('zebra');
+await capi.set('zebra', zebraFamily, {chunk: 256}, 'mammals');
+
+// Example: Store a seal that gets released in 1 hour (ttl: 1 hour)
+await capi.set('seal', {name: 'Neil', habitat: 'Pool'}, {ttl: 3600}, 'mammals');
 ```
 
 ---
