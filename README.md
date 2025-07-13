@@ -11,7 +11,7 @@ Very simple browser storage/cache handler, no need to know how to handle browser
 - Simple API for caching with promises
 - Automatically uses `localStorage` for small items and uses `IndexedDB` for large or complex data, including fallback's or storage failure
 - Supports **chunking** large values to avoid size limits in IndexedDB
-- Supports **TTL (time-to-live)** expiration for cache entries (in seconds)
+- Supports **TTL (time-to-live)** expiration for cache entries (in seconds) with automatic background cleanup
 - Supports **namespaces** to avoid key collisions and organize cached data
 - Automatically cleans up expired entries on access
 
@@ -111,7 +111,7 @@ console.log(hasElephant); // true or false
 - Values that serialize to JSON and are small enough are stored in `localStorage` for fast access.
 - Large values (by default over 1 MB or with TTL > 1 hour) are stored in IndexedDB.
 - Very large JSON values are **split into chunks** (default 512 KB) and stored as separate records in IndexedDB to work around browser limits.
-- Expired entries are cleaned up on access automatically, *but keep in mind that no background cleanup is performed*.
+- Expired entries are cleaned up automatically every minute.
 - Namespaces prefix keys with `{namespace}::` to avoid collisions.
 
 ---

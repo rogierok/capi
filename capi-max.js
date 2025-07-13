@@ -12,6 +12,7 @@ function n(a, b) {
 
 const capi = {
     p: null,
+    _ci: null,
     g() {
         return this.p || (this.p = new Promise((r, j) => {
             const q = indexedDB.open(d, 1);
@@ -19,6 +20,42 @@ const capi = {
             q.onsuccess = () => r(q.result);
             q.onerror = () => j(q.error);
         }));
+    },
+    async _cl() {
+        Object.keys(localStorage).forEach(k => {
+            const v = localStorage.getItem(k);
+            if (!v) return;
+            try {
+                const x = JSON.parse(v);
+                if (x.expires && Date.now() > x.expires) localStorage.removeItem(k);
+            } catch { localStorage.removeItem(k); }
+        });
+    },
+    async _cd() {
+        const db = await this.g();
+        return new Promise(r => {
+            const t = db.transaction(s, 'readwrite'), o = t.objectStore(s), q = o.getAllKeys();
+            q.onsuccess = () => {
+                const ks = q.result, g = o.getAll(ks);
+                g.onsuccess = () => {
+                    const vs = g.result;
+                    ks.forEach((k, i) => {
+                        const x = vs[i];
+                        if (x && x.expires && Date.now() > x.expires) o.delete(k);
+                    });
+                    r();
+                };
+                g.onerror = () => r();
+            };
+            q.onerror = () => r();
+        });
+    },
+    sC() {
+        if (this._ci) return;
+        this._ci = setInterval(() => {
+            this._cl();
+            this._cd();
+        }, 60000);
     },
     async iS(k, v, o, a) {
         const db = await this.g();
@@ -134,7 +171,9 @@ const capi = {
         } catch {
             return await this.iS(k, v, o, a);
         }
-        const z = b(x);
+        const enc = typeof TextEncoder !== 'undefined' ? new TextEncoder() : null;
+        const bytes = enc ? enc.encode(x) : Array.from(unescape(encodeURIComponent(x))).map(c => c.charCodeAt(0));
+        const z = bytes.length;
         const T = 20 * 1024 * 1024;
         let chunkOpt = o && typeof o.chunk !== 'undefined' ? o.chunk : true;
         let chunkSize = 512 * 1024;
@@ -143,12 +182,14 @@ const capi = {
         const shouldChunk = chunkSize > 0 && (chunkOpt === true || typeof chunkOpt === 'number' || z > T);
         if (shouldChunk) {
             const chunks = [];
-            for (let i = 0; i < x.length; i += chunkSize) {
-                chunks.push(x.slice(i, i + chunkSize));
+            for (let i = 0; i < bytes.length; i += chunkSize) {
+                const chunkBytes = bytes.slice(i, i + chunkSize);
+                const chunkStr = btoa(String.fromCharCode.apply(null, chunkBytes));
+                chunks.push(chunkStr);
             }
             await this.iS(k + '::cc', chunks.length, o, a);
             await Promise.all(chunks.map((chunk, idx) => this.iS(`${k}::c${idx}`, chunk, o, a)));
-        } else if ((o && o.ttl && o.ttl > 3600) || z > l) {
+        } else if (z > l) {
             await this.iS(k, v, o, a);
         } else {
             try {
@@ -179,14 +220,25 @@ const capi = {
                 return null;
             }
             try {
-                return JSON.parse(chunks.join(''));
+                let byteArr = [];
+                chunks.forEach(chunkStr => {
+                    const bin = atob(chunkStr);
+                    for (let i = 0; i < bin.length; i++) byteArr.push(bin.charCodeAt(i));
+                });
+                let str;
+                if (typeof TextDecoder !== 'undefined') {
+                    str = new TextDecoder().decode(new Uint8Array(byteArr));
+                } else {
+                    str = decodeURIComponent(escape(String.fromCharCode.apply(null, byteArr)));
+                }
+                return JSON.parse(str);
             } catch {
                 return null;
             }
         }
-        const l = this.lG(k, a);
-        if (l !== null) return l;
-        return await this.iG(k, a);
+        const idb = await this.iG(k, a);
+        if (idb !== null) return idb;
+        return this.lG(k, a);
     },
     async delete(k, a) {
         this.lD(k, a);
@@ -212,3 +264,4 @@ const capi = {
 };
 
 export default capi;
+capi.sC();
