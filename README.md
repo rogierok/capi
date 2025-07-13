@@ -13,7 +13,6 @@ Very simple browser storage/cache handler, no need to know how to handle browser
 - Supports **chunking** large values to avoid size limits in IndexedDB
 - Supports **TTL (time-to-live)** expiration for cache entries (in seconds) with automatic background cleanup
 - Supports **namespaces** to avoid key collisions and organize cached data
-- Automatically cleans up expired entries on access
 
 ---
 
