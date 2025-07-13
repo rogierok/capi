@@ -2,10 +2,6 @@ const l = 1024 * 1024;
 const d = 'capi';
 const s = 'cache';
 
-function b(x) {
-    return new Blob([x]).size;
-}
-
 function n(a, b) {
     return a ? `${a}::${b}` : b;
 }
