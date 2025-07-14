@@ -1,6 +1,8 @@
 # capi
 
-Very simple browser storage/cache handler, no need to know how to handle browser storage, that's what this API should do for you! keeping it simple and easy to understand.
+Very simple browser storage/cache handler, keeping it simple and easy to understand.
+
+With the countless differences between localStorage and IndexedDB it can be a headache to manage your cache data, with capi you don't even have to think about it, it just works!
 
 *This library is browser-only. It relies on `localStorage` and `IndexedDB`, which are not available in Node.js environments.*
 
@@ -13,6 +15,7 @@ Very simple browser storage/cache handler, no need to know how to handle browser
 - Supports **chunking** large values to avoid size limits in IndexedDB
 - Supports **TTL (time-to-live)** expiration for cache entries (in seconds) with automatic background cleanup
 - Supports **namespaces** to avoid key collisions and organize cached data
+- Background handling of localStorage and IndexedDB without changing any syntax
 
 ---
 
@@ -115,7 +118,7 @@ console.log(hasElephant); // true or false
 ## Storage behavior
 
 - Values that serialize to JSON and are small enough are stored in `localStorage` for fast access.
-- Large values (by default over 1mb) are stored in IndexedDB.
+- Large values (by default over 1MB) are stored in IndexedDB.
 - Very large values (2.5MB or above) are **split into chunks** (default 512 KB) and stored as separate records in IndexedDB to work around browser limits.
 - Expired entries are cleaned up automatically every minute.
 - Namespaces prefix keys with `{namespace}::` to avoid collisions.
